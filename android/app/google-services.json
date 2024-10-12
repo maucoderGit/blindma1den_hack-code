@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1030830152772",
+    "project_id": "hackathon-fda02",
+    "storage_bucket": "hackathon-fda02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1030830152772:android:5946ba3ac9c634c7ebf011",
+        "android_client_info": {
+          "package_name": "com.blindma1den.hackaton_team.flutter_apps"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1030830152772-eiakui3ce9o741oq7g2afptsq5cijn77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2ZxGYrH6AnqAeZAcTbJErFZgVpkl6TNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1030830152772-eiakui3ce9o741oq7g2afptsq5cijn77.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1030830152772-i5q9g0r64gefuncqsa1ogbirrnvk02cb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.blindma1den.hackatonteam.flutterApps"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

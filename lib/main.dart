@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_apps/login.dart';
 import 'package:flutter_apps/screens/area.dart';
 
 void main() async {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light(useMaterial3: true),
       initialRoute: "/home",
       routes: {
-        "/home": (context) => const AreaScreen()
+        "/home": (context) => const AreaScreen(),
+        "/login": (context) => const LoginScreen(),
       },
     );
   }
