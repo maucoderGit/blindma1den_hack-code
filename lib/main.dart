@@ -1,38 +1,44 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/firebase_options.dart';
-import 'package:flutter_apps/login.dart';
+import 'package:flutter_apps/screens/login.dart';
 import 'package:flutter_apps/screens/area.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+  final prefs = await SharedPreferences.getInstance();
+  final user = prefs.get("user");
+  final isLogged = user != null;
+  runApp(MyApp(
+    isLogged: isLogged,
+  ));
 }
 
 
-
 class MyApp extends StatelessWidget {
+    final bool isLogged;
+  const MyApp({super.key, required this.isLogged});
 
-    initFirebase() async {
-    return await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-  const MyApp({super.key});
 
 
   @override
   Widget build(BuildContext context) {
-    initFirebase();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light(useMaterial3: true),
-      initialRoute: "/home",
+      theme: ThemeData.dark(useMaterial3: true),
+      initialRoute: isLogged ? "/home": "/login",
       routes: {
         "/home": (context) => const AreaScreen(),
         "/login": (context) => const LoginScreen(),
       },
+
     );
   }
 }
