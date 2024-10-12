@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
       });
       return dataUser;
     } on FirebaseAuthException catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

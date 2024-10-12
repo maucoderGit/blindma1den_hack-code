@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_apps/firebase_options.dart';
 import 'package:flutter_apps/login.dart';
 import 'package:flutter_apps/screens/area.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_apps/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(useMaterial3: true),
-      initialRoute: "/login",
+      initialRoute: "/home",
       routes: {
         "/home": (context) => const AreaScreen(),
         "/login": (context) => const LoginScreen(),
