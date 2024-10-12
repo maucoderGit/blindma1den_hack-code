@@ -1,15 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/widgets/map.dart';
 import 'package:flutter_apps/widgets/message_form.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 import '../widgets/message_list.dart';
 
-enum UserSelection {
-  selectCoordinate,
-  readingMessages,
-  none
-}
+enum UserSelection { selectCoordinate, readingMessages, none }
 
 class AreaScreen extends StatefulWidget {
   const AreaScreen({super.key});
@@ -35,7 +34,7 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
       DraggableScrollableController();
 
   final DraggableScrollableController formSheetController =
-  DraggableScrollableController();
+      DraggableScrollableController();
 
   List records = [];
 
@@ -62,6 +61,55 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
     super.initState();
 
     controller.addObserver(this);
+    handleMessage();
+  }
+
+  @pragma('vm:entry-point')
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    await Firebase.initializeApp();
+
+    print("Handling a background message: ${message.messageId}");
+  }
+
+  handleMessage() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    print(fcmToken);
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      FlutterLocalNotificationsPlugin fc = FlutterLocalNotificationsPlugin();
+      fc.show(
+          0,
+          message.notification?.title ?? "",
+          message.notification?.body ?? "",
+          const NotificationDetails(
+              android: AndroidNotificationDetails("app", "app",
+                  channelDescription: "prueba",
+                  importance: Importance.high,
+                  color: Colors.blue,
+                  playSound: true,
+                  icon: '@mipmap/ic_launcher'),
+              iOS: DarwinNotificationDetails(
+                  presentSound: true, presentAlert: true, presentBadge: true)),
+          payload: 'Open from Local Notification');
+    });
   }
 
   @override
@@ -76,8 +124,10 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
       fit: StackFit.expand,
       children: [
         MapWidget(controller: controller, geoPointTapped: geoPointTapMethod),
-        messageList(minExtent, maxExtent, initialExtent, selection, sheetController, records),
-        registerMessageWidget(minExtent, maxExtent, initialExtent, selection, formSheetController, context),
+        messageList(minExtent, maxExtent, initialExtent, selection,
+            sheetController, records),
+        registerMessageWidget(minExtent, maxExtent, initialExtent, selection,
+            formSheetController, context),
       ],
     ));
   }

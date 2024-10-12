@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1030830152772",
+    "firebase_url": "https://hackathon-fda02-default-rtdb.firebaseio.com",
     "project_id": "hackathon-fda02",
     "storage_bucket": "hackathon-fda02.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1030830152772-8o8laerf43243na57lbkvuqvfd5j475p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blindma1den.hackaton_team.flutter_apps",
+            "certificate_hash": "b8878ca6ddcad90ebefeada2fc254bc9629791ae"
+          }
+        },
         {
           "client_id": "1030830152772-eiakui3ce9o741oq7g2afptsq5cijn77.apps.googleusercontent.com",
           "client_type": 3
