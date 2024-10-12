@@ -64,20 +64,10 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
     handleMessage();
   }
 
-  @pragma('vm:entry-point')
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    // If you're going to use other Firebase services in the background, such as Firestore,
-    // make sure you call `initializeApp` before using other Firebase services.
-    await Firebase.initializeApp();
-
-    print("Handling a background message: ${message.messageId}");
-  }
-
   handleMessage() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
 
-    print(fcmToken);
+    // print(fcmToken);
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -91,9 +81,8 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
       sound: true,
     );
 
-    print('User granted permission: ${settings.authorizationStatus}');
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+          FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       FlutterLocalNotificationsPlugin fc = FlutterLocalNotificationsPlugin();
       fc.show(
           0,
@@ -110,6 +99,7 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
                   presentSound: true, presentAlert: true, presentBadge: true)),
           payload: 'Open from Local Notification');
     });
+    }
   }
 
   @override
