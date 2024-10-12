@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_apps/widgets/drawable_screen.dart';
+import 'package:flutter_apps/widgets/custom_text_input.dart';
 import 'package:flutter_apps/widgets/map.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+
+import '../constants/border_radius.dart';
 
 enum UserSelection {
   selectCoordinate,
@@ -118,12 +119,96 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
   Widget displayRegisterMessage(ScrollController scrollController) {
     return SingleChildScrollView(
       controller: scrollController,
-      child: Form(child:
-          Column(children: [
-            Text("EJUEUEU")
-          ],
-        )
-      ),
+      child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("",
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 18,
+                          )),
+                      Card.filled(
+                        elevation: 0,
+                        color: const Color.fromRGBO(0, 5, 27, 1.0),
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              color: Colors.black
+                          ),
+                          borderRadius: cardRadius(),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          child: Text("", style: TextStyle(fontWeight: FontWeight.w500, color: Colors.white)),
+                        ),
+                      )
+                    ]
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: MediaQuery.of(context).size.width / 1.15, child: Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: Color.fromRGBO(191, 191, 191, 1.0)
+                        ),
+                        borderRadius: cardRadius(),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                        child: Text(""),
+                      )
+                  )),
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(width: MediaQuery.of(context).size.width / 1.15, child: Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                          color: Color.fromRGBO(191, 191, 191, 1.0)
+                      ),
+                      borderRadius: cardRadius(),
+                    ),
+                    child: CustomTextInput(
+                      hintText: 'sale_order_notification.default_message', userTyped: (value) {
+                    }, obscure: false, defaultValue: "",
+                    ),
+                  )),
+                ],
+              ),
+              Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.white,
+                            disabledBackgroundColor: Colors.transparent,
+                            disabledForegroundColor: Colors.grey
+                        ),
+                        onPressed: () async {
+
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text("sale_order_notification.send_message"),
+                      ),
+                    ],
+                ),
+            ],
+          )),
     );
   }
 
