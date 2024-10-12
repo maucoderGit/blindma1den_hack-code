@@ -35,11 +35,15 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.max,
         children: [
-          ElevatedButton(
+          Center(
+            
+            child: FilledButton.icon(
             onPressed: signInWithGoogle, // el null deshabilita el botón
-            child: const Text('Iniciar sesion con Google'),
+            label: const Text('Iniciar sesion con Google'),
           ),
+          )
         ],
       ),
     );
