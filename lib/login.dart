@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle(context) async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       final GoogleSignInAuthentication? googleAuth =
@@ -18,12 +19,20 @@ class LoginScreen extends StatelessWidget {
       final dataUser = await FirebaseAuth.instance.signInWithCredential(credential);
       FirebaseFirestore.instance
       .collection('users')
-      .add({
+      .doc(dataUser.user?.email)
+      .set({
         "email": dataUser.user?.email,
         "name": dataUser.user?.displayName,
         "photo": dataUser.user?.photoURL,
         "phone": dataUser.user?.phoneNumber,
       });
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('user',  dataUser.user!.email ?? "");
+
+       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+
       return dataUser;
     } on FirebaseAuthException catch (e) {
       throw e;
@@ -33,18 +42,27 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+        
         mainAxisAlignment: MainAxisAlignment.end,
         mainAxisSize: MainAxisSize.max,
         children: [
           Center(
-            
-            child: FilledButton.icon(
-            onPressed: signInWithGoogle, // el null deshabilita el botón
-            label: const Text('Iniciar sesion con Google'),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: FilledButton.icon(
+            onPressed: () => signInWithGoogle(context),
+            label: const Text('Iniciar sesion con Google',
+            style: TextStyle(
+                fontSize: 16
+              ),),
           ),
+            ),
           )
         ],
+      ),
       ),
     );
   }
