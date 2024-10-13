@@ -61,15 +61,29 @@ class _AreaCScreenState extends State<AreaCScreen> {
             toFirestore: (Review review, _) => review.toFirestore())
         .get();
 
-        _locationsSaved = {};
+    _locationsSaved = {};
     for (var docSnapshot in places.docs) {
       setState(() {
         _locationsSaved.add(Marker(
-          markerId: MarkerId(
-              "${docSnapshot.data().latitude}${docSnapshot.data().longitude}"),
-          position:
-              LatLng(docSnapshot.data().latitude, docSnapshot.data().longitude),
-        ));
+            markerId: MarkerId(
+                "${docSnapshot.data().latitude}${docSnapshot.data().longitude}"),
+            position: LatLng(
+                docSnapshot.data().latitude, docSnapshot.data().longitude),
+            // consumeTapEvents: true,
+            onTap: () => {
+                  setState(() {
+                    selection = UserSelection.readingMessages;
+                    currentGeoPoint = LatLng(docSnapshot.data().latitude,
+                        docSnapshot.data().longitude);
+
+                    formSheetController.animateTo(0,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                    sheetController.animateTo(0.2,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  })
+                }));
       });
     }
   }
