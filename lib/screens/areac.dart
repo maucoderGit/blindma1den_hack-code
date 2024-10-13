@@ -61,6 +61,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
             toFirestore: (Review review, _) => review.toFirestore())
         .get();
 
+        _locationsSaved = {};
     for (var docSnapshot in places.docs) {
       setState(() {
         _locationsSaved.add(Marker(
@@ -182,6 +183,9 @@ class _AreaCScreenState extends State<AreaCScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('User Location Map'),
+          actions: [
+            IconButton(onPressed: getPlaces, icon: const Icon(Icons.refresh))
+          ],
         ),
         body: _center == null
             ? const Center(child: CircularProgressIndicator())
