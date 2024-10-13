@@ -42,53 +42,72 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double heightSeparator =
+        MediaQuery.of(context).size.height > 650 ? 25 : 10;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 14, 16, 25),
-      body: Padding(padding:
-          EdgeInsets.all(20),
+        backgroundColor: const Color.fromARGB(255, 14, 16, 25),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 45,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 35, right: 35),
-              child: Center(child: Expanded(child: Text("Manten tus viajes seguros", textAlign: TextAlign.center, style: TextStyle(fontSize: 22))))),
-          const SizedBox(
-            height: 45,
-          ),
-          Center(child: Image.asset("assets/logo/logo1.png", cacheHeight: 150)),
-          const SizedBox(
-            height: 40,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 35, right: 35),
-            child: Expanded(child: Text(
-              "Comienza a sentirte mas seguro y ayuda a otros a sentirse seguros",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.white60),
-            )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: FilledButton.icon(
-                onPressed: () => signInWithGoogle(context),
-                label: const Text(
-                  'Iniciar sesion con Google',
-                  style: TextStyle(fontSize: 16),
-                ),
-                style: FilledButton.styleFrom(backgroundColor: Colors.white),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                height: heightSeparator,
               ),
-            ),
-          )
-        ],
-      ),
-    ));
+              const Padding(
+                  padding: EdgeInsets.only(left: 35, right: 35),
+                  child: Center(
+                      child: Expanded(
+                          child: Text("Manten tus viajes seguros",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 20))))),
+              SizedBox(
+                height: heightSeparator,
+              ),
+              const Padding(
+                  padding: EdgeInsets.only(left: 35, right: 35),
+                  child: Center(
+                      child: Expanded(
+                          child: Text("SafeZone",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))))),
+              Center(
+                  child:
+                      Image.asset("assets/logo/logo1.png", cacheHeight: 150)),
+              SizedBox(
+                height: heightSeparator,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 28, right: 28),
+                child: Expanded(
+                    child: Text(
+                  "Descubre en tiempo real si te encuentras en una zona segura, basada en datos actualizados por otros usuarios como tú.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14, color: Colors.white60),
+                )),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: FilledButton.icon(
+                    onPressed: () => signInWithGoogle(context),
+                    label: const Text(
+                      'Iniciar sesion con Google',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    style:
+                        FilledButton.styleFrom(backgroundColor: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
