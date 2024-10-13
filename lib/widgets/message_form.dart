@@ -17,30 +17,24 @@ Widget registerMessageWidget(
       maxChildSize: maxExtent,
       initialChildSize: initialExtent,
       builder:
-      (BuildContext context, ScrollController scrollController) => SingleChildScrollView(
-    controller: scrollController,
-    child: Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      (BuildContext context, ScrollController scrollController) => Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      child: SingleChildScrollView(
+        controller: scrollController, child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: MediaQuery.of(context).size.width / 1.15, child: Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                        color: Color.fromRGBO(191, 191, 191, 1.0)
-                    ),
-                    borderRadius: cardRadius(),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-                    child: Text(""),
-                  )
-              )),
-            ],
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text("Share your review!"),
           ),
           const SizedBox(height: 20.0),
           Row(
@@ -55,19 +49,20 @@ Widget registerMessageWidget(
                   borderRadius: cardRadius(),
                 ),
                 child: CustomTextInput(
-                  hintText: 'sale_order_notification.default_message', userTyped: (value) {
+                  hintText: 'Describe tu experiencia con todos los usuarios. \n\nTu mensaje puede ahorrar muchos malos momentos.', userTyped: (value) {
                 }, obscure: false, defaultValue: "",
                 ),
               )),
             ],
           ),
+          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                 style: TextButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.white,
+                    foregroundColor: Colors.black,
                     disabledBackgroundColor: Colors.transparent,
                     disabledForegroundColor: Colors.grey
                 ),
@@ -75,11 +70,11 @@ Widget registerMessageWidget(
 
                   Navigator.pop(context, true);
                 },
-                child: const Text("sale_order_notification.send_message"),
+                child: const Text("Enviar mensaje"),
               ),
             ],
           ),
         ],
       )),
-  ));
+  )));
 }

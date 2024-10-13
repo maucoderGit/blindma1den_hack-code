@@ -18,7 +18,7 @@ class AreaScreen extends StatefulWidget {
 
 class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
   final controller = MapController.withUserPosition(
-      trackUserLocation: const UserTrackingOption(
+    trackUserLocation: const UserTrackingOption(
     enableTracking: true,
     unFollowUser: false,
   ));
@@ -149,7 +149,7 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
       selection = UserSelection.selectCoordinate;
       currentGeoPoint = position;
 
-      formSheetController.animateTo(0.5,
+      formSheetController.animateTo(0.45,
           duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
       sheetController.animateTo(0.0,
           duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
