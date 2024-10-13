@@ -1,16 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/constants/border_radius.dart';
 import 'package:flutter_apps/screens/area.dart';
 import 'package:flutter_apps/widgets/custom_text_input.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Widget registerMessageWidget(
     double minExtent,
     double maxExtent,
     double initialExtent,
     UserSelection selection,
+    double latitude,
+    double longitude,
     DraggableScrollableController sheetController,
     BuildContext context,
 ) {
+  String message = "";
+
   return DraggableScrollableSheet(
       controller: sheetController,
       minChildSize: minExtent,
@@ -32,9 +39,9 @@ Widget registerMessageWidget(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListTile(
+          const ListTile(
             leading: Icon(Icons.person),
-            title: Text("Share your review!"),
+            title: Text("Comparte tu experiencia!"),
           ),
           const SizedBox(height: 20.0),
           Row(
@@ -50,7 +57,8 @@ Widget registerMessageWidget(
                 ),
                 child: CustomTextInput(
                   hintText: 'Describe tu experiencia con todos los usuarios. \n\nTu mensaje puede ahorrar muchos malos momentos.', userTyped: (value) {
-                }, obscure: false, defaultValue: "",
+                    message = value;
+                  }, obscure: false, defaultValue: "",
                 ),
               )),
             ],
@@ -67,8 +75,29 @@ Widget registerMessageWidget(
                     disabledForegroundColor: Colors.grey
                 ),
                 onPressed: () async {
+                  try {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                  Navigator.pop(context, true);
+                    String? email = prefs.getString("user");
+                    if (email == null) {
+                      // TODO: ALERT DIALOG TO NOTIFY USERS REQUIRE SIGN IN
+                      return;
+                    }
+
+                    Map<String, dynamic> coordinateReview = {
+                      "email": email,
+                      "message": message,
+                      "longitude": longitude,
+                      "latitude": latitude,
+                    };
+
+                    FirebaseFirestore.instance.collection('zoneReviews').add(coordinateReview);
+
+                    sheetController.animateTo(0.0,
+                        duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
+                  } on FirebaseAuthException catch (e) {
+                    rethrow;
+                  }
                 },
                 child: const Text("Enviar mensaje"),
               ),
