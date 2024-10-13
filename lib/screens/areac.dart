@@ -246,7 +246,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
                           payload: 'Open from Local Notification');
                     },
                     backgroundColor: Colors.red,
-                    child: const Icon(Icons.add), //icono
+                    child: const Icon(Icons.sos), //icono
                   ),
                 ),
                 messageList(minExtent, maxExtent, initialExtent, selection,
