@@ -71,19 +71,23 @@ class _AreaCScreenState extends State<AreaCScreen> {
                 docSnapshot.data().latitude, docSnapshot.data().longitude),
             // consumeTapEvents: true,
             onTap: () => {
-                  setState(() {
-                    selection = UserSelection.readingMessages;
-                    currentGeoPoint = LatLng(docSnapshot.data().latitude,
-                        docSnapshot.data().longitude);
+              setState(() {
+                selection = UserSelection.readingMessages;
+                currentGeoPoint = LatLng(docSnapshot.data().latitude,
+                    docSnapshot.data().longitude);
 
-                    formSheetController.animateTo(0,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                    sheetController.animateTo(0.2,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                  })
-                }));
+                records = docSnapshot.data().storedMessages;
+
+                formSheetController.animateTo(0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+                sheetController.animateTo(0.2,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+              })
+            }
+          )
+        );
       });
     }
   }
