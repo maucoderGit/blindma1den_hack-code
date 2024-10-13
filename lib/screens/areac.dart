@@ -245,7 +245,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
         appBar: AppBar(
           title: const Text('SafeZone'),
           actions: [
-            IconButton(onPressed: getPlaces, icon: const Icon(Icons.refresh))
+            IconButton(onPressed: reloadPoint, icon: const Icon(Icons.refresh))
           ],
         ),
         drawer: SafeArea(
@@ -365,6 +365,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
                                   presentAlert: true,
                                   presentBadge: true)),
                           payload: 'Open from Local Notification');
+                          reloadPoint();
                     },
                     backgroundColor: Colors.red,
                     child: const Icon(Icons.sos), //icono
