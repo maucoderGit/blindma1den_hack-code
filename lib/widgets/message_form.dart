@@ -18,6 +18,7 @@ Widget registerMessageWidget(
   BuildContext context,
   Function reloadPoint,
   UserDB user,
+  String? identifier,
 ) {
   String message = "";
 
@@ -111,9 +112,35 @@ Widget registerMessageWidget(
                                         }
                                       ]);
 
-                                  FirebaseFirestore.instance
-                                      .collection('zoneReviews')
-                                      .add(coordinateReview.toFirestore());
+                                  if (identifier == null) {
+                                    FirebaseFirestore.instance
+                                        .collection('zoneReviews')
+                                        .add(coordinateReview.toFirestore());
+                                  } else {
+                                    final record = await FirebaseFirestore.instance
+                                        .collection('zoneReviews')
+                                        .doc(identifier)
+                                        .withConverter(
+                                        fromFirestore: Review.fromFirestore,
+                                        toFirestore: (Review review, _) => review.toFirestore())
+                                        .get();
+
+                                    List messages = record.data()!.storedMessages;
+
+                                    messages.insert(0,
+                                        {
+                                          "message": message,
+                                          "email": user.email,
+                                          "write_date": DateTime.now(),
+                                        });
+
+                                    FirebaseFirestore.instance
+                                        .collection('zoneReviews')
+                                        .doc(identifier)
+                                        .update({"messages": messages});
+                                  }
+
+                                  identifier = null;
 
                                   sheetController.animateTo(0.0,
                                       duration:

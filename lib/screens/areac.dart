@@ -25,6 +25,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
   GoogleMapController? mapController;
   LatLng? _center;
   Position? _currentPosition;
+  String? identifier;
   List records = [];
   LatLng? currentGeoPoint;
   UserDB user = UserDB(email: "", name: "", photo: "");
@@ -95,11 +96,12 @@ class _AreaCScreenState extends State<AreaCScreen> {
                         docSnapshot.data().longitude);
 
                     records = docSnapshot.data().storedMessages;
+                    identifier = docSnapshot.id;
 
                     formSheetController.animateTo(0,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.bounceIn);
-                    sheetController.animateTo(0.2,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.bounceIn);
+                    sheetController.animateTo(0.35,
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.bounceIn);
                   })
@@ -133,6 +135,17 @@ class _AreaCScreenState extends State<AreaCScreen> {
     setState(() {
       _center = LatLng(_currentPosition!.latitude, _currentPosition!.longitude);
     });
+  }
+
+  void addReviewInExistingPoint() {
+    selection = UserSelection.selectCoordinate;
+
+    formSheetController.animateTo(0.45,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.bounceIn);
+    sheetController.animateTo(0.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.bounceIn);
   }
 
   handleMessage() async {
@@ -176,6 +189,8 @@ class _AreaCScreenState extends State<AreaCScreen> {
   }
 
   void onSingleTap(LatLng latLng) {
+    identifier = null;
+
     if (selection != UserSelection.none) {
       closeTab();
     } else {
@@ -348,7 +363,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
                     child: const Icon(Icons.sos), //icono
                   ),
                 ),
-                messageList(minExtent, maxExtent, initialExtent, selection,
+                messageList(minExtent, maxExtent, initialExtent, selection, addReviewInExistingPoint,
                     sheetController, records),
                 registerMessageWidget(
                   minExtent,
@@ -361,6 +376,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   context,
                   reloadPoint,
                   user,
+                  identifier,
                 ),
               ]));
   }

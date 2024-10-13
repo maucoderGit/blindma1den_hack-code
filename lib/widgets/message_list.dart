@@ -8,6 +8,7 @@ Widget messageList(
   double maxExtent,
   double initialExtent,
   UserSelection selection,
+  Function addReview,
   DraggableScrollableController sheetController,
   List<dynamic> records,
 ) {
@@ -17,7 +18,14 @@ Widget messageList(
       maxChildSize: maxExtent,
       initialChildSize: initialExtent,
       builder: (BuildContext context, ScrollController scrollController) =>
-          Container(
+          Scaffold(
+            backgroundColor: Colors.transparent,
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.transparent,
+                onPressed: () => addReview(),
+                child: const Icon(Icons.rate_review_outlined),
+              ),
+              body: Container(
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
@@ -74,5 +82,5 @@ Widget messageList(
                             ),
                           ));
                         });
-                  })));
+                  }))));
 }
