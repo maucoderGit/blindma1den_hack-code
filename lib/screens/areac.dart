@@ -196,7 +196,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('User Location Map'),
+          title: const Text('SafeZone'),
           actions: [
             IconButton(onPressed: getPlaces, icon: const Icon(Icons.refresh))
           ],
@@ -222,16 +222,32 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   ),
                 ),
                 Positioned(
-                    bottom: 16.0, 
-                    left: 16.0,  
-                    child: FloatingActionButton(
-                      onPressed: () {
-                      print("help")
-                      ;
-                      },
-                      backgroundColor: Colors.red,
-                      child: const Icon(Icons.add), //icono
-          ),
+                  bottom: 16.0,
+                  left: 16.0,
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      FlutterLocalNotificationsPlugin fc =
+                          FlutterLocalNotificationsPlugin();
+                      fc.show(
+                          0,
+                          "Alerta SOS!!!",
+                          "Alerta de emergencia",
+                          const NotificationDetails(
+                              android: AndroidNotificationDetails("app", "app",
+                                  channelDescription: "prueba",
+                                  importance: Importance.high,
+                                  color: Colors.blue,
+                                  playSound: true,
+                                  icon: '@mipmap/ic_launcher'),
+                              iOS: DarwinNotificationDetails(
+                                  presentSound: true,
+                                  presentAlert: true,
+                                  presentBadge: true)),
+                          payload: 'Open from Local Notification');
+                    },
+                    backgroundColor: Colors.red,
+                    child: const Icon(Icons.add), //icono
+                  ),
                 ),
                 messageList(minExtent, maxExtent, initialExtent, selection,
                     sheetController, records),
