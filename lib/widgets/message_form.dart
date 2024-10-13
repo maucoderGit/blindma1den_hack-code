@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/constants/border_radius.dart';
 import 'package:flutter_apps/models/review.dart';
+import 'package:flutter_apps/models/user.dart';
 import 'package:flutter_apps/screens/areac.dart';
 import 'package:flutter_apps/widgets/custom_text_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ Widget registerMessageWidget(
     DraggableScrollableController sheetController,
     BuildContext context,
     Function reloadPoint,
+    UserDB user,
 ) {
   String message = "";
 
@@ -77,23 +79,15 @@ Widget registerMessageWidget(
                 ),
                 onPressed: () async {
                   try {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                    String? email = prefs.getString("user");
-                    if (email == null) {
-                      // TODO: ALERT DIALOG TO NOTIFY USERS REQUIRE SIGN IN
-                      return;
-                    }
-
                     Review coordinateReview = Review(
-                      email: email,
+                      email: user.email,
                       message: "",
                       longitude: longitude,
                       latitude: latitude,
                       writeDate: DateTime.now(),
                       storedMessages: [{
                         "message": message,
-                        "email": email,
+                        "email": user.email,
                         "write_date": DateTime.now(),
                       }]
                     );

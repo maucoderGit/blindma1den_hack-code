@@ -49,7 +49,7 @@ Widget messageList(
                             return Card.outlined(
                                 child: ListTile(
                               leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16.0),
+                                  borderRadius: BorderRadius.circular(50),
                                   child: Image(
                                     image: NetworkImage(
                                       data!["photo"]!,

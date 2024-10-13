@@ -237,8 +237,18 @@ class _AreaCScreenState extends State<AreaCScreen> {
                 children: [
                   ListTile(
                     leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0),
+                        borderRadius: BorderRadius.circular(50),
                         child: Image(
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator(
+      value: loadingProgress.expectedTotalBytes != null ? 
+             loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+             : null,
+      ),
+    );
+                          },
                           image: NetworkImage(
                             user.photo!,
                           ),
@@ -351,6 +361,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   formSheetController,
                   context,
                   reloadPoint,
+                  user,
                 ),
               ]));
   }
