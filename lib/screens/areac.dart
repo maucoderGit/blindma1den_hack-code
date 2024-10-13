@@ -7,6 +7,7 @@ import 'package:flutter_apps/widgets/message_list.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserSelection { selectCoordinate, readingMessages, none }
 
@@ -225,9 +226,35 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   bottom: 16.0,
                   left: 16.0,
                   child: FloatingActionButton(
-                    onPressed: () {
+                    onPressed: () async {
+
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                    String? email = prefs.getString("user");
+                    if (email == null) {
+                      return;
+                    }
+                      Review coordinateReview = Review(
+                          email: email,
+                          message: "",
+                          longitude: _center?.longitude ?? 0,
+                          latitude: _center?.latitude ?? 0,
+                          writeDate: DateTime.now(),
+                          storedMessages: [
+                            {
+                              "message": "SOS",
+                              "email": email,
+                              "write_date": DateTime.now(),
+                            }
+                          ]);
+
+                      FirebaseFirestore.instance
+                          .collection('zoneReviews')
+                          .add(coordinateReview.toFirestore());
+
                       FlutterLocalNotificationsPlugin fc =
                           FlutterLocalNotificationsPlugin();
+
                       fc.show(
                           0,
                           "Alerta SOS!!!",
