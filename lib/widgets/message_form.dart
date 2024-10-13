@@ -39,12 +39,12 @@ Widget registerMessageWidget(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const ListTile(
             leading: Icon(Icons.person),
             title: Text("Comparte tu experiencia!"),
           ),
-          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -64,7 +64,6 @@ Widget registerMessageWidget(
               )),
             ],
           ),
-          const SizedBox(height: 20.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
