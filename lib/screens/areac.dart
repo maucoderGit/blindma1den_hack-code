@@ -221,6 +221,18 @@ class _AreaCScreenState extends State<AreaCScreen> {
                     },
                   ),
                 ),
+                Positioned(
+                    bottom: 16.0, 
+                    left: 16.0,  
+                    child: FloatingActionButton(
+                      onPressed: () {
+                      print("help")
+                      ;
+                      },
+                      backgroundColor: Colors.red,
+                      child: const Icon(Icons.add), //icono
+          ),
+                ),
                 messageList(minExtent, maxExtent, initialExtent, selection,
                     sheetController, records),
                 registerMessageWidget(
