@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_apps/models/review.dart';
 import 'package:flutter_apps/widgets/message_form.dart';
 import 'package:flutter_apps/widgets/message_list.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -35,20 +37,44 @@ class _AreaCScreenState extends State<AreaCScreen> {
 
   UserSelection selection = UserSelection.none;
 
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
+  Set<Marker> _locationsSaved = {};
 
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
-    handleMessage();
+    _getUserLocation().whenComplete(() {
+      getPlaces();
+      handleMessage();
+    });
   }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
 
-  _getUserLocation() async {
+  getPlaces() async {
+    final places = await FirebaseFirestore.instance
+        .collection("zoneReviews")
+        .withConverter(
+            fromFirestore: Review.fromFirestore,
+            toFirestore: (Review review, _) => review.toFirestore())
+        .get();
+
+        _locationsSaved = {};
+    for (var docSnapshot in places.docs) {
+      setState(() {
+        _locationsSaved.add(Marker(
+          markerId: MarkerId(
+              "${docSnapshot.data().latitude}${docSnapshot.data().longitude}"),
+          position:
+              LatLng(docSnapshot.data().latitude, docSnapshot.data().longitude),
+        ));
+      });
+    }
+  }
+
+  Future<void> _getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 // Check if location services are enabled
@@ -142,6 +168,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
   void closeTab() {
     // Close the tab if it's open (adjust logic according to your needs)
     setState(() {
+      _markers = {};
       selection =
           UserSelection.none; // or whatever logic to indicate closed state
       formSheetController.animateTo(0.0,
@@ -156,6 +183,9 @@ class _AreaCScreenState extends State<AreaCScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('User Location Map'),
+          actions: [
+            IconButton(onPressed: getPlaces, icon: const Icon(Icons.refresh))
+          ],
         ),
         body: _center == null
             ? const Center(child: CircularProgressIndicator())
@@ -171,7 +201,10 @@ class _AreaCScreenState extends State<AreaCScreen> {
                       zoom: 15.0,
                     ),
                     onTap: (latLng) => onSingleTap(latLng),
-                    markers: _markers,
+                    markers: {
+                      ..._markers,
+                      ..._locationsSaved,
+                    },
                   ),
                 ),
                 messageList(minExtent, maxExtent, initialExtent, selection,
