@@ -5,7 +5,6 @@ import 'package:flutter_apps/widgets/map.dart';
 import 'package:flutter_apps/widgets/message_form.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-
 import '../widgets/message_list.dart';
 
 enum UserSelection { selectCoordinate, readingMessages, none }
@@ -56,10 +55,22 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
     });
   }
 
+  void closeTab() {
+    // Close the tab if it's open (adjust logic according to your needs) 
+      setState(() {
+        selection = UserSelection.none; // or whatever logic to indicate closed state
+          formSheetController.animateTo(0.0,
+          duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
+          sheetController.animateTo(0.0,
+          duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
+      });
+
+
+  }
+
   @override
   void initState() {
     super.initState();
-
     controller.addObserver(this);
     handleMessage();
   }
@@ -67,7 +78,7 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
   handleMessage() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
 
-    // print(fcmToken);
+      print(fcmToken);
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -119,14 +130,22 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
         registerMessageWidget(minExtent, maxExtent, initialExtent, selection,
             formSheetController, context),
       ],
-    ));
+        ),
+      )
+    ;
   }
 
   @override
   void onSingleTap(GeoPoint position) {
     super.onSingleTap(position);
 
-    setState(() {
+    if (selection != UserSelection.none) {
+      closeTab();
+
+    }
+
+    else {
+      setState(() {
       selection = UserSelection.selectCoordinate;
       currentGeoPoint = position;
 
@@ -134,7 +153,10 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
           duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
       sheetController.animateTo(0.0,
           duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
-    });
+          });
+
+    }
+    
   }
 
   @override
