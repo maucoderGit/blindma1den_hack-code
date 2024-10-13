@@ -19,68 +19,69 @@ Widget messageList(
       initialChildSize: initialExtent,
       builder: (BuildContext context, ScrollController scrollController) =>
           Scaffold(
-            backgroundColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
               floatingActionButton: FloatingActionButton(
+                heroTag: null,
                 backgroundColor: Colors.transparent,
                 onPressed: () => addReview(),
                 child: const Icon(Icons.rate_review_outlined),
               ),
               body: Container(
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-              ),
-              child: ListView.builder(
-                  controller: scrollController,
-                  padding: const EdgeInsets.all(6),
-                  itemCount: records.length,
-                  itemBuilder: (context, index) {
-                    Map review = records[index];
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                  ),
+                  child: ListView.builder(
+                      controller: scrollController,
+                      padding: const EdgeInsets.all(6),
+                      itemCount: records.length,
+                      itemBuilder: (context, index) {
+                        Map review = records[index];
 
-                    return FutureBuilder(
-                        future: FirebaseFirestore.instance
-                            .collection("users")
-                            .doc(review["email"])
-                            .get(),
-                        builder: (context, snap) {
-                          DateTime date = (review['write_date'] as Timestamp)
-                              .toDate()
-                              .toLocal();
+                        return FutureBuilder(
+                            future: FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(review["email"])
+                                .get(),
+                            builder: (context, snap) {
+                              DateTime date =
+                                  (review['write_date'] as Timestamp)
+                                      .toDate()
+                                      .toLocal();
 
-                          Map? data = snap.data?.data();
+                              Map? data = snap.data?.data();
 
-                          if (snap.hasData) {
-                            return Card.outlined(
-                                child: ListTile(
-                              leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Image(
-                                    image: NetworkImage(
-                                      data!["photo"]!,
-                                    ),
-                                  )),
-                              title: Text(data["name"] ?? ""),
-                              subtitle: Text(
-                                  review["message"]),
-                              trailing: 
-                                    Text(DateFormat("yyyy/MM/dd").format(date)),
-                            ));
-                          }
+                              if (snap.hasData) {
+                                return Card.outlined(
+                                    child: ListTile(
+                                  leading: ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: Image(
+                                        image: NetworkImage(
+                                          data!["photo"]!,
+                                        ),
+                                      )),
+                                  title: Text(data["name"] ?? ""),
+                                  subtitle: Text(review["message"]),
+                                  trailing: Text(
+                                      DateFormat("yyyy/MM/dd").format(date)),
+                                ));
+                              }
 
-                          return Card.outlined(
-                              child: ListTile(
-                            title: Text(review["message"] ?? ""),
-                            subtitle: Column(
-                              children: [
-                                Text(
-                                    "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
-                              ],
-                            ),
-                          ));
-                        });
-                  }))));
+                              return Card.outlined(
+                                  child: ListTile(
+                                title: Text(review["message"] ?? ""),
+                                subtitle: Column(
+                                  children: [
+                                    Text(
+                                        "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                                  ],
+                                ),
+                              ));
+                            });
+                      }))));
 }
