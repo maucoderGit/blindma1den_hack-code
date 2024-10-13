@@ -43,28 +43,32 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      backgroundColor: const Color.fromARGB(255, 14, 16, 25),
+      body: Padding(padding:
+          EdgeInsets.all(20),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 25,
+            height: 45,
           ),
-          Image.asset("assets/imgs/img_login.jpg"),
+          Padding(
+            padding: EdgeInsets.only(left: 35, right: 35),
+              child: Center(child: Expanded(child: Text("Manten tus viajes seguros", textAlign: TextAlign.center, style: TextStyle(fontSize: 22))))),
+          const SizedBox(
+            height: 45,
+          ),
+          Center(child: Image.asset("assets/logo/logo1.png", cacheHeight: 150)),
           const SizedBox(
             height: 40,
           ),
           const Padding(
-            padding: EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Inicia Sesión", style: TextStyle(fontSize: 40)),
-                Text(
-                  "y comienza a sentirte mas seguro",
-                  style: TextStyle(fontSize: 30, color: Colors.white60),
-                ),
-              ],
-            ),
+            padding: EdgeInsets.only(left: 35, right: 35),
+            child: Expanded(child: Text(
+              "Comienza a sentirte mas seguro y ayuda a otros a sentirse seguros",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.white60),
+            )),
           ),
           const SizedBox(
             height: 20,
@@ -85,6 +89,6 @@ class LoginScreen extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 }

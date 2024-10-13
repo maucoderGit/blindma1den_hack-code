@@ -46,7 +46,6 @@ class LoginScreen extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Center(
-            
             child: FilledButton.icon(
             onPressed: signInWithGoogle, // el null deshabilita el botón
             label: const Text('Iniciar sesion con Google'),
