@@ -4,22 +4,20 @@ import 'package:flutter_apps/screens/areac.dart';
 import 'package:intl/intl.dart';
 
 Widget messageList(
-    double minExtent,
-    double maxExtent,
-    double initialExtent,
-    UserSelection selection,
-    DraggableScrollableController sheetController,
-    List<dynamic> records,
-  ) {
-  return
-    DraggableScrollableSheet(
-        controller: sheetController,
-        minChildSize: minExtent,
-        maxChildSize: maxExtent,
-        initialChildSize: initialExtent,
-        builder:
-            (BuildContext context, ScrollController scrollController) =>
-            Container(
+  double minExtent,
+  double maxExtent,
+  double initialExtent,
+  UserSelection selection,
+  DraggableScrollableController sheetController,
+  List<dynamic> records,
+) {
+  return DraggableScrollableSheet(
+      controller: sheetController,
+      minChildSize: minExtent,
+      maxChildSize: maxExtent,
+      initialChildSize: initialExtent,
+      builder: (BuildContext context, ScrollController scrollController) =>
+          Container(
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
@@ -34,20 +32,41 @@ Widget messageList(
                   itemCount: records.length,
                   itemBuilder: (context, index) {
                     Map review = records[index];
-                    final user = FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(review["email"]).get();
 
-                    DateTime date = (review['write_date'] as Timestamp).toDate().toLocal();
+                    return FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(review["email"])
+                            .get(),
+                        builder: (context, snap) {
+                          DateTime date = (review['write_date'] as Timestamp)
+                              .toDate()
+                              .toLocal();
 
-                    return Card.outlined(
-                      child:
-                        ListTile(
-                        title: Text(review["message"] ?? ""),
-                        subtitle: Text("${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
-                      )
-                    );
-                  }
-              ))
-    );
+                          Map? data = snap.data?.data();
+
+                          if (snap.hasData) {
+                            return Card.outlined(
+                                child: ListTile(
+                              leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  child: Image(
+                                    image: NetworkImage(
+                                      data!["photo"]!,
+                                    ),
+                                  )),
+                              title: Text(review["message"] ?? ""),
+                              subtitle: Text(
+                                  "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                            ));
+                          }
+
+                          return Card.outlined(
+                              child: ListTile(
+                            title: Text(review["message"] ?? ""),
+                            subtitle: Text(
+                                "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                          ));
+                        });
+                  })));
 }

@@ -72,23 +72,21 @@ class _AreaCScreenState extends State<AreaCScreen> {
                 docSnapshot.data().latitude, docSnapshot.data().longitude),
             // consumeTapEvents: true,
             onTap: () => {
-              setState(() {
-                selection = UserSelection.readingMessages;
-                currentGeoPoint = LatLng(docSnapshot.data().latitude,
-                    docSnapshot.data().longitude);
+                  setState(() {
+                    selection = UserSelection.readingMessages;
+                    currentGeoPoint = LatLng(docSnapshot.data().latitude,
+                        docSnapshot.data().longitude);
 
-                records = docSnapshot.data().storedMessages;
+                    records = docSnapshot.data().storedMessages;
 
-                formSheetController.animateTo(0,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
-                sheetController.animateTo(0.2,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
-              })
-            }
-          )
-        );
+                    formSheetController.animateTo(0,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                    sheetController.animateTo(0.2,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
+                  })
+                }));
       });
     }
   }
@@ -231,13 +229,13 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   left: 16.0,
                   child: FloatingActionButton(
                     onPressed: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
 
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                    String? email = prefs.getString("user");
-                    if (email == null) {
-                      return;
-                    }
+                      String? email = prefs.getString("user");
+                      if (email == null) {
+                        return;
+                      }
                       Review coordinateReview = Review(
                           email: email,
                           message: "",

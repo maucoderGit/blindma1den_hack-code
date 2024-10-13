@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_apps/firebase_options.dart';
 import 'package:flutter_apps/screens/areac.dart';
 import 'package:flutter_apps/screens/login.dart';
-import 'package:flutter_apps/screens/area.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
