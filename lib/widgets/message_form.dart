@@ -16,6 +16,7 @@ Widget registerMessageWidget(
     double longitude,
     DraggableScrollableController sheetController,
     BuildContext context,
+    Function reloadPoint,
 ) {
   String message = "";
 
@@ -101,6 +102,8 @@ Widget registerMessageWidget(
 
                     sheetController.animateTo(0.0,
                         duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
+
+                        reloadPoint();
                   } on FirebaseAuthException catch (e) {
                     rethrow;
                   }

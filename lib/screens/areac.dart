@@ -195,6 +195,11 @@ class _AreaCScreenState extends State<AreaCScreen> {
     });
   }
 
+  reloadPoint(){
+     _markers = {};
+     getPlaces();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -288,7 +293,9 @@ class _AreaCScreenState extends State<AreaCScreen> {
                     currentGeoPoint?.latitude ?? 0,
                     currentGeoPoint?.longitude ?? 0,
                     formSheetController,
-                    context),
+                    context,
+                    reloadPoint,
+                    ),
               ]));
   }
 }
