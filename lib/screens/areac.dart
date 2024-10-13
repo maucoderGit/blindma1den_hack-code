@@ -229,10 +229,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
         drawer: SafeArea(
           child: Drawer(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 20
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
               child: Column(
                 children: [
                   ListTile(
@@ -241,13 +238,15 @@ class _AreaCScreenState extends State<AreaCScreen> {
                         child: Image(
                           loadingBuilder: (context, child, loadingProgress) {
                             if (loadingProgress == null) return child;
-    return Center(
-      child: CircularProgressIndicator(
-      value: loadingProgress.expectedTotalBytes != null ? 
-             loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-             : null,
-      ),
-    );
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
                           },
                           image: NetworkImage(
                             user.photo!,
@@ -257,8 +256,8 @@ class _AreaCScreenState extends State<AreaCScreen> {
                   ),
                   Expanded(
                     child: Container(
-                  width: 100,
-                ),
+                      width: 100,
+                    ),
                   ),
                   ListTile(
                     title: const Text("Cerrar sesión"),

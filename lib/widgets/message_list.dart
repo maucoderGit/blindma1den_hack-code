@@ -55,17 +55,23 @@ Widget messageList(
                                       data!["photo"]!,
                                     ),
                                   )),
-                              title: Text(review["message"] ?? ""),
+                              title: Text(data["name"] ?? ""),
                               subtitle: Text(
-                                  "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                                  review["message"]),
+                              trailing: 
+                                    Text(DateFormat("yyyy/MM/dd").format(date)),
                             ));
                           }
 
                           return Card.outlined(
                               child: ListTile(
                             title: Text(review["message"] ?? ""),
-                            subtitle: Text(
-                                "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                    "${review["email"] ?? ""} - ${DateFormat("yyyy/MM/dd").format(date)}"),
+                              ],
+                            ),
                           ));
                         });
                   })));
