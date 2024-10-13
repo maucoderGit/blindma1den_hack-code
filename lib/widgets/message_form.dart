@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/constants/border_radius.dart';
+import 'package:flutter_apps/models/review.dart';
 import 'package:flutter_apps/screens/areac.dart';
 import 'package:flutter_apps/widgets/custom_text_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -84,14 +85,20 @@ Widget registerMessageWidget(
                       return;
                     }
 
-                    Map<String, dynamic> coordinateReview = {
-                      "email": email,
-                      "message": message,
-                      "longitude": longitude,
-                      "latitude": latitude,
-                    };
+                    Review coordinateReview = Review(
+                      email: email,
+                      message: "",
+                      longitude: longitude,
+                      latitude: latitude,
+                      writeDate: DateTime.now(),
+                      storedMessages: [{
+                        "message": message,
+                        "email": email,
+                        "write_date": DateTime.now(),
+                      }]
+                    );
 
-                    FirebaseFirestore.instance.collection('zoneReviews').add(coordinateReview);
+                    FirebaseFirestore.instance.collection('zoneReviews').add(coordinateReview.toFirestore());
 
                     sheetController.animateTo(0.0,
                         duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);

@@ -5,13 +5,8 @@ class Review {
   final double latitude;
   final double longitude;
   final String? message;
-
-  Review({
-    this.email,
-    required this.latitude,
-    required this.longitude,
-    this.message,
-  });
+  final DateTime writeDate;
+  final List storedMessages;
 
   factory Review.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -19,19 +14,28 @@ class Review {
   ) {
     final data = snapshot.data();
     return Review(
-      email: data?['email'],
+      email: data?['email'] ?? "",
       latitude: data?['latitude'] ?? 0,
       longitude: data?['longitude']?? 0,
+      writeDate: data?['write_date'] ?? DateTime.now(),
       message: data?['message'],
+      storedMessages: data?['messages'] ?? [],
     );
   }
 
+  Review({
+    this.email,
+    required this.latitude,
+    required this.longitude,
+    this.message,
+    this.storedMessages = const [], required this.writeDate,
+  });
+
   Map<String, dynamic> toFirestore() {
     return {
-      if (email != null) "email": email,
       "latitude": latitude,
       "longitude": longitude,
-      if (message != null) "message": message,
+      "messages": storedMessages
     };
   }
 }
