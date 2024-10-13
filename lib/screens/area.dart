@@ -23,6 +23,7 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
     unFollowUser: false,
   ));
 
+
   UserSelection selection = UserSelection.none;
   GeoPoint? currentGeoPoint;
 
@@ -125,16 +126,16 @@ class _AreaScreenState extends State<AreaScreen> with OSMMixinObserver {
       fit: StackFit.expand,
       children: [
         MapWidget(controller: controller, geoPointTapped: geoPointTapMethod),
-        messageList(minExtent, maxExtent, initialExtent, selection,
-            sheetController, records),
-        registerMessageWidget(
-            minExtent,
-            maxExtent,
-            initialExtent,
-            selection,
-            currentGeoPoint?.latitude ?? 0,
-            currentGeoPoint?.longitude ?? 0,
-            formSheetController, context),
+        // messageList(minExtent, maxExtent, initialExtent, selection,
+        //     sheetController, records),
+        // registerMessageWidget(
+        //     minExtent,
+        //     maxExtent,
+        //     initialExtent,
+        //     selection,
+        //     currentGeoPoint?.latitude ?? 0,
+        //     currentGeoPoint?.longitude ?? 0,
+        //     formSheetController, context),
       ],
         ),
       )

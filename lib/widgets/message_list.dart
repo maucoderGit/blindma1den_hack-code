@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_apps/screens/area.dart';
+import 'package:flutter_apps/screens/areac.dart';
 
 Widget messageList(
     double minExtent,

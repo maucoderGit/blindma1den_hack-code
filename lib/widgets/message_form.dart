@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/constants/border_radius.dart';
-import 'package:flutter_apps/screens/area.dart';
+import 'package:flutter_apps/screens/areac.dart';
 import 'package:flutter_apps/widgets/custom_text_input.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

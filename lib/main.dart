@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/firebase_options.dart';
+import 'package:flutter_apps/screens/areac.dart';
 import 'package:flutter_apps/screens/login.dart';
 import 'package:flutter_apps/screens/area.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark(useMaterial3: true),
       initialRoute: isLogged ? "/home": "/login",
       routes: {
-        "/home": (context) => const AreaScreen(),
+        "/home": (context) => const AreaCScreen(),
         "/login": (context) => const LoginScreen(),
       },
 
