@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_apps/models/review.dart';
+import 'package:flutter_apps/models/user.dart';
 import 'package:flutter_apps/widgets/message_form.dart';
 import 'package:flutter_apps/widgets/message_list.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -25,6 +27,7 @@ class _AreaCScreenState extends State<AreaCScreen> {
   Position? _currentPosition;
   List records = [];
   LatLng? currentGeoPoint;
+  UserDB user = UserDB(email: "", name: "", photo: "");
 
   static const double minExtent = 0;
   static const double maxExtent = 0.6;
@@ -44,10 +47,24 @@ class _AreaCScreenState extends State<AreaCScreen> {
   @override
   void initState() {
     super.initState();
+    getUserInfo();
     _getUserLocation().whenComplete(() {
       getPlaces();
       handleMessage();
     });
+  }
+
+  getUserInfo() async {
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString("user");
+    final u = await FirebaseFirestore.instance
+        .collection("users")
+        .withConverter(
+            fromFirestore: UserDB.fromFirestore,
+            toFirestore: (UserDB user, _) => user.toFirestore())
+        .doc(email)
+        .get();
+    user = u.data()!;
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -195,9 +212,9 @@ class _AreaCScreenState extends State<AreaCScreen> {
     });
   }
 
-  reloadPoint(){
-     _markers = {};
-     getPlaces();
+  reloadPoint() {
+    _markers = {};
+    getPlaces();
   }
 
   @override
@@ -208,6 +225,45 @@ class _AreaCScreenState extends State<AreaCScreen> {
           actions: [
             IconButton(onPressed: getPlaces, icon: const Icon(Icons.refresh))
           ],
+        ),
+        drawer: SafeArea(
+          child: Drawer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 20
+              ),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: Image(
+                          image: NetworkImage(
+                            user.photo!,
+                          ),
+                        )),
+                    title: Text(user.name),
+                  ),
+                  Expanded(
+                    child: Container(
+                  width: 100,
+                ),
+                  ),
+                  ListTile(
+                    title: const Text("Cerrar sesión"),
+                    leading: const Icon(Icons.logout),
+                    onTap: () async {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.remove("user");
+                    },
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
         body: _center == null
             ? const Center(child: CircularProgressIndicator())
@@ -286,16 +342,16 @@ class _AreaCScreenState extends State<AreaCScreen> {
                 messageList(minExtent, maxExtent, initialExtent, selection,
                     sheetController, records),
                 registerMessageWidget(
-                    minExtent,
-                    maxExtent,
-                    initialExtent,
-                    selection,
-                    currentGeoPoint?.latitude ?? 0,
-                    currentGeoPoint?.longitude ?? 0,
-                    formSheetController,
-                    context,
-                    reloadPoint,
-                    ),
+                  minExtent,
+                  maxExtent,
+                  initialExtent,
+                  selection,
+                  currentGeoPoint?.latitude ?? 0,
+                  currentGeoPoint?.longitude ?? 0,
+                  formSheetController,
+                  context,
+                  reloadPoint,
+                ),
               ]));
   }
 }
