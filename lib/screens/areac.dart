@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_apps/models/review.dart';
 import 'package:flutter_apps/models/user.dart';
 import 'package:flutter_apps/widgets/message_form.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui' as ui;
 
 enum UserSelection { selectCoordinate, readingMessages, none }
 
@@ -81,9 +85,12 @@ class _AreaCScreenState extends State<AreaCScreen> {
         .get();
 
     _locationsSaved = {};
+      final iconMarker = await BitmapDescriptor.asset(
+          const ImageConfiguration(size: Size(24, 24)), 'assets/imgs/mark.png');
     for (var docSnapshot in places.docs) {
       setState(() {
         _locationsSaved.add(Marker(
+            icon: iconMarker,
             markerId: MarkerId(
                 "${docSnapshot.data().latitude}${docSnapshot.data().longitude}"),
             position: LatLng(
@@ -99,8 +106,8 @@ class _AreaCScreenState extends State<AreaCScreen> {
                     identifier = docSnapshot.id;
 
                     formSheetController.animateTo(0,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.bounceIn);
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.bounceIn);
                     sheetController.animateTo(0.35,
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.bounceIn);
@@ -141,11 +148,9 @@ class _AreaCScreenState extends State<AreaCScreen> {
     selection = UserSelection.selectCoordinate;
 
     formSheetController.animateTo(0.45,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.bounceIn);
+        duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
     sheetController.animateTo(0.0,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.bounceIn);
+        duration: const Duration(milliseconds: 200), curve: Curves.bounceIn);
   }
 
   handleMessage() async {
@@ -188,18 +193,20 @@ class _AreaCScreenState extends State<AreaCScreen> {
     }
   }
 
-  void onSingleTap(LatLng latLng) {
+  void onSingleTap(LatLng latLng) async {
     identifier = null;
-
     if (selection != UserSelection.none) {
       closeTab();
     } else {
+      final iconMarker = await BitmapDescriptor.asset(
+          const ImageConfiguration(size: Size(36, 36)), 'assets/imgs/mark2.png');
+
       setState(() {
         _markers.add(
           Marker(
-            markerId: MarkerId("${latLng.latitude}${latLng.longitude}"),
-            position: latLng,
-          ),
+              markerId: MarkerId("${latLng.latitude}${latLng.longitude}"),
+              position: latLng,
+              icon: iconMarker),
         );
         selection = UserSelection.selectCoordinate;
         currentGeoPoint = latLng;
@@ -363,8 +370,8 @@ class _AreaCScreenState extends State<AreaCScreen> {
                     child: const Icon(Icons.sos), //icono
                   ),
                 ),
-                messageList(minExtent, maxExtent, initialExtent, selection, addReviewInExistingPoint,
-                    sheetController, records),
+                messageList(minExtent, maxExtent, initialExtent, selection,
+                    addReviewInExistingPoint, sheetController, records),
                 registerMessageWidget(
                   minExtent,
                   maxExtent,
