@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -32,11 +33,17 @@ class LoginScreen extends StatelessWidget {
 
       await prefs.setString('user', dataUser.user!.email ?? "");
 
+      Navigator.of(context).pop();
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
 
       return dataUser;
     } on FirebaseAuthException catch (e) {
-      throw e;
+      Navigator.of(context).pop();
+      rethrow;
+    } catch (e) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Autenticacion fallida", textAlign: TextAlign.center)));
+      rethrow;
     }
   }
 
@@ -59,20 +66,18 @@ class LoginScreen extends StatelessWidget {
               const Padding(
                   padding: EdgeInsets.only(left: 35, right: 35),
                   child: Center(
-                      child: Expanded(
-                          child: Text("Manten tus viajes seguros",
+                      child: Text("Manten tus viajes seguros",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 20))))),
+                              style: TextStyle(fontSize: 20)))),
               SizedBox(
                 height: heightSeparator,
               ),
               const Padding(
                   padding: EdgeInsets.only(left: 35, right: 35),
                   child: Center(
-                      child: Expanded(
-                          child: Text("SafeZone",
+                      child: Text("SafeZone",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))))),
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)))),
               Center(
                   child:
                       Image.asset("assets/logo/logo1.png", cacheHeight: 150)),
@@ -81,12 +86,11 @@ class LoginScreen extends StatelessWidget {
               ),
               const Padding(
                 padding: EdgeInsets.only(left: 28, right: 28),
-                child: Expanded(
-                    child: Text(
+                child: Text(
                   "Descubre en tiempo real si te encuentras en una zona segura, basada en datos actualizados por otros usuarios como tú.",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 14, color: Colors.white60),
-                )),
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -96,7 +100,24 @@ class LoginScreen extends StatelessWidget {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: FilledButton.icon(
-                    onPressed: () => signInWithGoogle(context),
+                    onPressed: () {
+                      showDialog(
+                        barrierDismissible: false,
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            content: SizedBox(
+                              height: 30,
+                                width: 30,
+                                child: Center(child: LoadingAnimationWidget.twistingDots(
+                                leftDotColor: const Color(0xFF1A1A3F),
+                                rightDotColor: const Color(0xFFEA3799),
+                                size: 25,
+                              ),
+                            )),
+                          )
+                      );
+                      signInWithGoogle(context);
+                    },
                     label: const Text(
                       'Iniciar sesion con Google',
                       style: TextStyle(fontSize: 16),
@@ -105,7 +126,15 @@ class LoginScreen extends StatelessWidget {
                         FilledButton.styleFrom(backgroundColor: Colors.white),
                   ),
                 ),
-              )
+              ),
+              const Center(child: Padding(
+                padding: EdgeInsets.only(left: 28, right: 28),
+                child: Text(
+                  "Hecho con <3 por: @defTati, @freddyon15 y @maucoder.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 8, color: Colors.white60),
+                ),
+              )),
             ],
           ),
         ));
